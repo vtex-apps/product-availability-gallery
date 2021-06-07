@@ -1,0 +1,5 @@
+query inventoryProduct($ID: ID!, $warehouseId: ID!) {
+  inventoryProduct(sku: $ID, warehouseId: $warehouseId) {
+    quantity
+  }
+}
