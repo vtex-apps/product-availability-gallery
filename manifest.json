@@ -58,6 +58,9 @@
     },
     {
       "name": "READONLY_USER_DS"
+    },
+    {
+      "name": "1_dataentity_edit"
     }
   ],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
