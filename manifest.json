@@ -8,7 +8,9 @@
   "categories": [],
   "dependencies": {
     "vtex.product-context": "0.x",
-    "vtex.css-handles": "1.x"
+    "vtex.css-handles": "1.x",
+    "vtex.session-client": "1.x",
+    "vtex.store-graphql": "2.x"
   },
   "builders": {
     "store": "0.x",
@@ -40,6 +42,34 @@
     },
     {
       "name": "colossus-write-logs"
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "api.vtex.com",
+        "path": "/api/dataentities/*"
+      }
+    },
+    {
+      "name": "ADMIN_DS"
+    },
+    {
+      "name": "POWER_USER_DS"
+    },
+    {
+      "name": "READONLY_USER_DS"
+    },
+    {
+      "name": "2_dataentity_list"
+    },
+    {
+      "name": "2_dataentity_view"
+    },
+    {
+      "name": "1_dataentity_list"
+    },
+    {
+      "name": "1_dataentity_view"
     }
   ],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
