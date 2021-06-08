@@ -58,18 +58,6 @@
     },
     {
       "name": "READONLY_USER_DS"
-    },
-    {
-      "name": "2_dataentity_list"
-    },
-    {
-      "name": "2_dataentity_view"
-    },
-    {
-      "name": "1_dataentity_list"
-    },
-    {
-      "name": "1_dataentity_view"
     }
   ],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"

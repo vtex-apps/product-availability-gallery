@@ -3,6 +3,7 @@ import { LRUCache, method, Service } from '@vtex/api'
 
 import { Clients } from './clients'
 import { status } from './middlewares/status'
+import { user } from './middlewares/user'
 import { validate } from './middlewares/validate'
 
 const TIMEOUT_MS = 800
@@ -37,6 +38,7 @@ declare global {
   // The shape of our State object found in `ctx.state`. This is used as state bag to communicate between middlewares.
   interface State extends RecorderState {
     code: number
+    userId: string
   }
 }
 
@@ -47,6 +49,9 @@ export default new Service({
     // `status` is the route ID from service.json. It maps to an array of middlewares (or a single handler).
     status: method({
       GET: [validate, status],
+    }),
+    user: method({
+      GET: [validate, user],
     }),
   },
 })

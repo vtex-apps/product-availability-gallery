@@ -136,6 +136,16 @@ function ProductAvailabilityWrapper({
             .then(json => setBalance(json.balance[0]))
     }
 
+    const getUser = () => {
+        fetch(`https://development--kaluapoc.myvtex.com/_v/user/${prodId}`,
+            {
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            // eslint-disable-next-line no-console
+            .then(json => console.log('json', json))
+    }
+
     useEffect(() => {
         if (typeof window !== "undefined") {
             // getData()
