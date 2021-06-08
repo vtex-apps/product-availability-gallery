@@ -151,7 +151,6 @@ function ProductAvailabilityWrapper({
     }, [session])
 
     useEffect(() => {
-        console.log('userId', userId);
         if(userId) {
             getData()
             getUser()
