@@ -4,7 +4,7 @@ import { ExternalClient } from '@vtex/api'
 export default class AdditionalDataClient extends ExternalClient {
 
   constructor(context: IOContext, options?: InstanceOptions) {
-    super(`http://kaluapoc.vtexcommercestable.com.br/api/dataentities/CL/`, context,
+    super(`http://${context.account}.vtexcommercestable.com.br/api/dataentities/CL/`, context,
     {
       ...options,
       headers: {

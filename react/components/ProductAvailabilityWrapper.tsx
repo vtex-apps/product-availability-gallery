@@ -1,17 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import {useProduct} from 'vtex.product-context'
 import type {ProductTypes} from 'vtex.product-context'
-// import { useRuntime } from 'vtex.render-runtime'
+import { useRuntime } from 'vtex.render-runtime'
 import {useCssHandles} from 'vtex.css-handles'
 import type {CssHandlesTypes} from 'vtex.css-handles'
 import {defineMessages} from 'react-intl'
-import {useQuery} from 'react-apollo'
 import {useFullSession} from 'vtex.session-client'
 
 import ProductAvailability from './ProductAvailability'
 import {CssHandlesProvider} from './CssHandlesContext'
-import Brand from '../queries/getBrand.graphql'
-import clientAgent from '../queries/clientAgent.graphql'
 
 const messages = defineMessages({
     title: {
@@ -112,22 +109,19 @@ function ProductAvailabilityWrapper({
                                     }: Props) {
     const {handles, withModifiers} = useCssHandles(CSS_HANDLES, {classes})
     const productContextValue = useProduct()
-    // const runtime = useRuntime()
+    const runtime = useRuntime()
     const session = useFullSession()
     const [userEmail, setUserEmail] = useState<string>('');
+    const [userId, setUserId] = useState<string>('');
+    const [isSeller, setIsSeller] = useState<boolean>(false);
     const seller = getFirstAvailableSeller(
         productContextValue?.selectedItem?.sellers
     )
     const prodId = productContextValue?.selectedItem?.itemId;
     const [balance, setBalance] = useState<Balance>({totalQuantity: 0, reservedQuantity: 0})
 
-    // eslint-disable-next-line no-console
-    // console.log('productContextValue', productContextValue?.selectedItem?.itemId)
-    // eslint-disable-next-line no-console
-    // console.log('runtime', runtime)
-
     const getData = () => {
-        fetch(`https://development--kaluapoc.myvtex.com/_v/status/${prodId}`,
+        fetch(`https://development--${runtime.account}.myvtex.com/_v/status/${prodId}`,
             {
                 credentials: 'include'
             })
@@ -137,53 +131,38 @@ function ProductAvailabilityWrapper({
     }
 
     const getUser = () => {
-        fetch(`https://development--kaluapoc.myvtex.com/_v/user/${prodId}`,
+        fetch(`https://development--${runtime.account}.myvtex.com/_v/user/${userId}`,
             {
                 credentials: 'include'
             })
             .then(response => response.json())
             // eslint-disable-next-line no-console
-            .then(json => console.log('json', json))
+            .then(user => {
+                if(user[0].agente === "VE") {
+                    setIsSeller(true);
+                }
+            })
     }
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-            // getData()
             setUserEmail(session?.data?.session?.namespaces?.profile?.email)
-            console.log('session?.data?.session?.namespaces?.profile', session?.data?.session)
-        }
+            setUserId(session?.data?.session?.namespaces?.profile?.id?.value)}
     }, [session])
 
     useEffect(() => {
-        getData()
-    }, [userEmail])
-
-    //
-    // console.log('data', data);
-    // console.log('error', error);
-
-    if (userEmail) {
-
-        // //eslint-disable-next-line no-console
-        // console.log('data', data);
-        // console.log('error', error);
-        // getData()
-    }
-
-    console.log('userEmail', userEmail);
+        console.log('userId', userId);
+        if(userId) {
+            getData()
+            getUser()
+        }
+    }, [userId])
 
     if (!productContextValue) {
         return null
     }
 
-    const { data, loading, error } = useQuery(clientAgent, {
-        variables: {
-            mail: 'email=fcvagliente@gmail.com',
-        },
-        ssr: false,
-    })
-
-    // const availableQuantity = balance ? balance.totalQuantity - balance.reservedQuantity : 0;
+    const availableQuantity = balance.totalQuantity - balance.reservedQuantity ?? 0
 
     return (
         <div>
@@ -192,9 +171,9 @@ function ProductAvailabilityWrapper({
                     threshold={threshold}
                     lowStockMessage={lowStockMessage}
                     highStockMessage={highStockMessage}
-                    showAvailability={showAvailability}
+                    showAvailability={isSeller ? showAvailability : false}
                     showAvailabilityMessage={showAvailabilityMessage}
-                    availableQuantity={balance.totalQuantity - balance.reservedQuantity ?? 0}
+                    availableQuantity={availableQuantity}
                 />
             </CssHandlesProvider>
         </div>
