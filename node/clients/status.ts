@@ -12,16 +12,17 @@ export default class Status extends ExternalClient {
     })
   }
 
-  public async getStatus(status: number): Promise<string> {
-    return this.http.get( `${status.toString()}?an=${this.context.account}`, {
+  public async getStatus(status: number, warehouse: string): Promise<string> {
+    return this.http.get( `${status.toString()}?an=${warehouse}`, {
       metric: 'status-get',
     })
   }
 
   public async getStatusWithHeaders(
-    status: number
+    status: number,
+    warehouse: string
   ): Promise<IOResponse<string>> {
-    return this.http.getRaw(`${status.toString()}?an=${this.context.account}`, {
+    return this.http.getRaw(`${status.toString()}?an=${warehouse}`, {
       metric: 'status-get-raw',
     })
   }

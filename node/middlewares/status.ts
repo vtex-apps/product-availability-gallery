@@ -1,12 +1,13 @@
 export async function status(ctx: Context, next: () => Promise<any>) {
   const {
-    state: { code },
+    state: { code, warehouse },
     clients: { status: statusClient },
   } = ctx
 
   console.info('Received code:', code)
+  console.info('Received ctx:', ctx.state)
 
-  const statusResponse = await statusClient.getStatus(code)
+  const statusResponse = await statusClient.getStatus(code,warehouse)
 
   console.info('Status response:', statusResponse)
 
@@ -14,7 +15,7 @@ export async function status(ctx: Context, next: () => Promise<any>) {
     headers,
     data,
     status: responseStatus,
-  } = await statusClient.getStatusWithHeaders(code)
+  } = await statusClient.getStatusWithHeaders(code,warehouse)
 
   console.info('Status headers', headers)
   console.info('Status data:', data)

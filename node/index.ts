@@ -39,6 +39,7 @@ declare global {
   interface State extends RecorderState {
     code: number
     userId: string
+    warehouse: string
   }
 }
 

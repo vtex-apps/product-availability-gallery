@@ -1,25 +1,30 @@
 Arguments: 
-  /Users/tmehdi/.nvm/versions/node/v15.8.0/bin/node /Users/tmehdi/.config/yarn/global/node_modules/yarn/bin/yarn.js --non-interactive --ignore-engines
+  /usr/local/Cellar/node/15.13.0/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js
 
 PATH: 
-  /Users/tmehdi/.pyenv/bin:/Users/tmehdi/.nvm/versions/node/v15.8.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/favric/workspace/vital/node_modules/.bin
 
 Yarn version: 
   1.22.10
 
 Node version: 
-  15.8.0
+  15.13.0
 
 Platform: 
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/tmehdi/vtex/repos/vital/service-example/react/package.json: Unexpected token } in JSON at position 939
-      at JSON.parse (<anonymous>)
-      at /Users/tmehdi/.config/yarn/global/node_modules/yarn/lib/cli.js:1625:59
-      at Generator.next (<anonymous>)
-      at step (/Users/tmehdi/.config/yarn/global/node_modules/yarn/lib/cli.js:310:30)
-      at /Users/tmehdi/.config/yarn/global/node_modules/yarn/lib/cli.js:321:13
+  Error: https://registry.yarnpkg.com/vtex.render-runtime: Not found
+      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:66988:18)
+      at Request.self.callback (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:140749:22)
+      at Request.emit (node:events:369:20)
+      at Request.<anonymous> (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:141721:10)
+      at Request.emit (node:events:369:20)
+      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:141643:12)
+      at Object.onceWrapper (node:events:475:28)
+      at IncomingMessage.emit (node:events:381:22)
+      at endReadableNT (node:internal/streams/readable:1307:12)
+      at processTicksAndRejections (node:internal/process/task_queues:81:21)
 
 npm manifest: 
   {
@@ -39,9 +44,8 @@ npm manifest:
       "@vtex/api": "6.42.1",
       "@vtex/test-tools": "^3.1.0",
       "vtex.css-handles": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.css-handles@1.0.0/public/@types/vtex.css-handles",
-      "vtex.inventory-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.inventory-graphql@0.16.0/public/@types/vtex.inventory-graphql",
       "vtex.product-context": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-context@0.9.9/public/@types/vtex.product-context",
-      "vtex.render-runtime": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.128.4/public/@types/vtex.render-runtime",
+      "vtex.render-runtime": "8.x"
     },
     "version": "0.1.0"
   }
@@ -6166,10 +6170,6 @@ Lockfile:
     version "1.0.0"
     resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.css-handles@1.0.0/public/@types/vtex.css-handles#336b23ef3a9bcb2b809529ba736783acd405d081"
   
-  "vtex.inventory-graphql@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.inventory-graphql@0.16.0/public/@types/vtex.inventory-graphql":
-    version "0.16.0"
-    resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.inventory-graphql@0.16.0/public/@types/vtex.inventory-graphql#22332c71d19f2f55e128e4da3cbd6b40c77df03d"
-  
   "vtex.product-context@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-context@0.9.9/public/@types/vtex.product-context":
     version "0.9.9"
     resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-context@0.9.9/public/@types/vtex.product-context#d9619a3365c1b04c1110c4beb11a53eae39aac75"
@@ -6177,10 +6177,6 @@ Lockfile:
   "vtex.render-runtime@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.128.4/public/@types/vtex.render-runtime":
     version "8.128.4"
     resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.128.4/public/@types/vtex.render-runtime#63491782d44910c4edc8528bc645c7c335c33128"
-  
-  "vtex.search-graphql@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.search-graphql@0.43.0/public/@types/vtex.search-graphql":
-    version "0.43.0"
-    resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.search-graphql@0.43.0/public/@types/vtex.search-graphql#ce3eabf17ad172fe4e96b374cd86a2f76306ed79"
   
   w3c-hr-time@^1.0.1:
     version "1.0.2"

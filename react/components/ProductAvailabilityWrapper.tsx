@@ -113,6 +113,7 @@ function ProductAvailabilityWrapper({
     const session = useFullSession()
     const [userEmail, setUserEmail] = useState<string>('');
     const [userId, setUserId] = useState<string>('');
+    const [warehouse, setWarehouse] = useState<string>('');
     const [isSeller, setIsSeller] = useState<boolean>(false);
     const seller = getFirstAvailableSeller(
         productContextValue?.selectedItem?.sellers
@@ -121,7 +122,7 @@ function ProductAvailabilityWrapper({
     const [balance, setBalance] = useState<Balance>({totalQuantity: 0, reservedQuantity: 0})
 
     const getData = () => {
-        fetch(`https://development--${runtime.account}.myvtex.com/_v/status/${prodId}`,
+        fetch(`https://${runtime.workspace}--${runtime.account}.myvtex.com/_v/status/${prodId}/${warehouse}`,
             {
                 credentials: 'include'
             })
@@ -131,14 +132,16 @@ function ProductAvailabilityWrapper({
     }
 
     const getUser = () => {
-        fetch(`https://development--${runtime.account}.myvtex.com/_v/user/${userId}`,
+        fetch(`https://${runtime.workspace}--${runtime.account}.myvtex.com/_v/user/${userId}`,
             {
                 credentials: 'include'
             })
             .then(response => response.json())
             // eslint-disable-next-line no-console
             .then(user => {
+                console.log(user[0])
                 if(user[0].agente === "VE") {
+                    setWarehouse(user[0].sucursal)
                     setIsSeller(true);
                 }
             })
@@ -152,10 +155,15 @@ function ProductAvailabilityWrapper({
 
     useEffect(() => {
         if(userId) {
-            getData()
             getUser()
         }
     }, [userId])
+
+    useEffect(() => {
+        if(userId) {
+            getData()
+        }
+    }, [warehouse])
 
     if (!productContextValue) {
         return null
