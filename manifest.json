@@ -1,9 +1,9 @@
 {
   "name": "product-availability-gallery",
   "vendor": "vtexarg",
-  "version": "0.5.0",
-  "title": "Service Example",
-  "description": "Reference app for VTEX IO Services",
+  "version": "0.5.3",
+  "title": "Custom product availability component",
+  "description": "To display available stock x product",
   "mustUpdateAt": "2018-01-04",
   "categories": [],
   "dependencies": {
@@ -22,6 +22,15 @@
     "prereleasy": "bash lint.sh"
   },
   "credentialType": "absolute",
+  "billingOptions": {
+    "support": {
+      "email": "help@vtex.com"
+    },
+    "type": "free",
+    "availableCountries": [
+      "*"
+    ]
+  },
   "policies": [
     {
       "name": "outbound-access",

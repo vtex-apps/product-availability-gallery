@@ -122,7 +122,7 @@ function ProductAvailabilityWrapper({
     const [balance, setBalance] = useState<Balance>({totalQuantity: 0, reservedQuantity: 0})
 
     const getData = () => {
-        fetch(`https://${runtime.workspace}--${runtime.account}.myvtex.com/_v/status/${prodId}/${warehouse}`,
+        fetch(`https://${window.location.hostname}/_v/status/${prodId}/${warehouse}`,
             {
                 credentials: 'include'
             })
@@ -132,14 +132,13 @@ function ProductAvailabilityWrapper({
     }
 
     const getUser = () => {
-        fetch(`https://${runtime.workspace}--${runtime.account}.myvtex.com/_v/user/${userId}`,
+        fetch(`https://${window.location.hostname}/_v/user/${userId}`,
             {
                 credentials: 'include'
             })
             .then(response => response.json())
             // eslint-disable-next-line no-console
             .then(user => {
-                console.log(user[0])
                 if(user[0].agente === "VE") {
                     setWarehouse(user[0].sucursal)
                     setIsSeller(true);
