@@ -1,127 +1,117 @@
+# Product Availability Gallery
 
+## Description
 
-# Service Example
+The Product Availability component shows the available amount of products. It also implements the needed services to request availability using the inventory API and validating USERS using masterdata.
+**IMPORTANT** This block was built to work only in account: ```arvital``` , however it can be easily evolved to support other customers.
 
-A reference app implementing a VTEX IO service with HTTP route handlers.
+It is available to be used in product page, gallery , category and search.
 
-![Service Example Architecture](https://user-images.githubusercontent.com/18706156/77381360-72489680-6d5c-11ea-9da8-f4f03b6c5f4c.jpg)
+:loudspeaker: **Disclaimer:** Don't fork this project; use, contribute, or open issue with your feature request
 
-We use [**KoaJS**](https://koajs.com/) as the web framework, so you might want to get into that
+## Table of Contents
 
-We also use the [**node-vtex-api**](https://github.com/vtex/node-vtex-api), a VTEX set of utilities for Node services. You can import this package using NPM from `@vtex/api` (already imported on this project)
+- [Usage](#usage)
+    - [Blocks API](#blocks-api)
+        - [Configuration](#configuration)
+    - [Styles API](#styles-api)
+        - [CSS Namespaces](#css-namespaces)
+- [Troubleshooting](#troubleshooting)
+- [Tests](#tests)
 
-- Start from `node/index.ts` and follow the comments and imports :)
+## Usage
 
-## Recipes
+This app uses our store builder with the blocks architecture. To know more about Store Builder [click here.](https://help.vtex.com/en/tutorial/understanding-storebuilder-and-stylesbuilder#structuring-and-configuring-our-store-with-object-object)
 
-### Defining routes on _service.json_ 
+To use this app or override the default CSS you need import it in your dependencies on `manifest.json` file.
+
 ```json
-{
-  "memory": 256,
-  "ttl": 10,
-  "timeout": 2,
-  "minReplicas": 2,
-  "maxReplicas": 4,
-  "routes": {
-    "status": {
-      "path": "/_v/status/:code",
-      "public": true
-    }
+  "dependencies": {
+    "vtexarg.product-availability-gallery-gallery": "1.x"
+  }
+```
+
+Then, add `product-availability-gallery-gallery` block to your `blocks.json`
+
+Now, you can change the behavior of the `product-availability-gallery-gallery` block.
+
+
+See an example of how to configure **showing availability**:
+
+```json
+"product-availability-gallery-gallery": {
+  "props": {
+    "showAvailability": true,
+    "showAvailabilityMessage": "Available items:"
   }
 }
 ```
 
-The `service.json` file that sits on the root of the `node` folder holds informations about this service, like the maximum timeout and number of replicas, what might be discontinued on the future, but also **sets its routes**. 
+### Blocks API
 
-Koa uses the [path-to-regexp](https://github.com/pillarjs/path-to-regexp) format for defining routes and, as seen on the example, we use the `:code` notation for declaring a **route param** named code, in this case. A HTTP request for `https://{{workspace}}--{{account}}.myvtex.com/_v/status/500` will match the route we've defined. 
+When implementing this app as a block, various inner blocks may be available. The following interface lists the available blocks within product-availability-gallery-gallery and describes if they are required or optional.
 
-For cach _key_ on the `routes` object, there should be a **corresponding entry** on the exported Service object on `node/index.ts`, this will hook your code to a specific route.
-
-### Access Control
-You can also provide a `public` option for each route. If `true`, that resource will be reachable for everyone on the internet. If `false`, VTEX credentials will be requested as well.
-
-Another way of controlling access to specific routes is using **ReBACs (Resource-based access)**, that supports more robust configuration. You can read more [on this document](https://docs.google.com/document/d/1ZxNHMFIXfXz3BgTN9xyrHL3V5dYz14wivYgQjRBZ6J8/edit#heading=h.z7pad3qd2qw7) (VTEX only).
-
-#### Query String
-For `?accepting=query-string`, you **don't need to declare anything**, as any query provided to the URL will already be available for you to use on the code as `ctx.query`, already parsed as an object, or `ctx.queryString`, taken directly from the URL as a string.
-
-#### Route Params
-Route Params will be available for you to use on the code as `ctx.vtex.params`, already parsed as an object.
-For a path like `/_v/status/:code`, if you receive the request `/_v/status/200`, `ctx.vtex.params` will return `{ code: '200' }`
-
-#### HTTP methods
-When you define a route on the `service.json`, your NodeJS handlers for that route will be triggered  **on every HTTP method** (GET, POST, PUT...), so, if you need to handle them separately you need to implement a "sub-router". Fortunately, the _node-vtex-api_ provides a helper function `method`, exported from `@vtex/api`, to accomplish that behaviour. Instead of passing your handlers directly to the corresponding route on `index.ts`, you pass a `method` call passing **an object with the desired method as key and one handler as its corresponding value**. Check this example:
-```typescript
-import { method } from '@vtex/api'
-...
-
-export default new Service<Clients, State>({
-  clients,
-  routes: {
-    status: method({
-      GET: statusGetHandler,
-      POST: statusPostHandler,
-    }),
-  },
-})
-```
-
-### Throwing errors
-
-When building a HTTP service, we should follow HTTP rules regarding data types, cache, authorization, and status code. Our example app sets a `ctx.status` value that will be used as a HTTP status code return value, but often we also want to give proper information about errors as well.
-
-The **node-vtex-api** already exports a handful of **custom error classes** that can be used for that purpose, like the `NotFoundError`. You just need to throw them inside one of the the route handlers that the appropriate response will be sent to the server.
-
-```typescript
-import { UserInputError } from '@vtex/api'
-
-export async function validate(ctx: Context, next: () => Promise<any>) {
-  const { code } = ctx.vtex.route.params
-  if (isNaN(code) || code < 100 || code > 600) {
-    throw new UserInputError('Code must be a number between 100 and 600')
+```json
+{
+  "product-availability-gallery-gallery": {
+    "component": "ProductAvailability"
   }
-...
+}
 ```
 
-You can check all the available errors [here](https://github.com/vtex/node-vtex-api/tree/fd6139349de4e68825b1074f1959dd8d0c8f4d5b/src/errors), but some are not useful for just-HTTP services. Check the most useful ones:
+For now this block does not have any required or optional blocks.
 
-|Error Class | HTTP Code |
-|--|:--:|
-| `UserInputError` | 400 |
-| `AuthenticationError` | 401 |
-| `ForbiddenError` | 403 |
-| `NotFoundError` | 404 |
+#### Configuration
 
-You can also **create your custom error**, just see how it's done above ;)
+Through the Storefront, you can change the product-availability-gallery's behavior and interface. However, you also can make in your theme app, as Store theme does.
 
-### Reading a JSON body
+| Prop name           | Type      | Description                                                                                 |
+| ------------------- | --------- | ------------------------------------------------------------------------------------------- |
+| `threshold`     | `Number` | DefineMinimum quantity that makes low stock message appear (if message is set). Default: 0    |
+| `lowStockMessage`        | `String` | String to be shown to user when stock is lower than threshold. Should have {quantity} inside the given string, to be replaced for the threshold property. Example: \"Only {quantity} left!\". Leave empty to not show. Default: ""              |
+| `highStockMessage`  | `String` | String to be shown when stock is higher or equal than threshold. If left empty, won\'t show. Default: ""                                                              |
+| `showAvailability`  | `Boolean` | Enables the possibility to show the available items instead of lowStockMessage or highStockMessage. Default: false                                                              |
+| `showAvailabilityMessage`  | `String` | String to be shown when show available option is true. If left empty, won\'t show. Default: ""                                                              |
 
-When writing POST or PUT handlers, for example, often you need to have access to the **request body** that comes as a JSON format, which is not provided directly by the handler function.
+### Styles API
 
-For this, you have to use the [co-body](https://www.npmjs.com/package/co-body) package that will parse the request into a readable JSON object, used as below: 
-```typescript
-import { json } from 'co-body'
-export async function method(ctx: Context, next: () => Promise<any>) {
-    const body = await json(ctx.req)
+This app provides some CSS classes as an API for style customization.
+
+To use this CSS API, you must add the `styles` builder and create an app styling CSS file.
+
+1. Add the `styles` builder to your `manifest.json`:
+
+```json
+  "builders": {
+    "styles": "1.x"
+  }
 ```
 
-### Other example apps
+2. Create a file called `vtex.product-availability-gallery.css` inside the `styles/css` folder. Add your custom styles:
 
-We use Node services across all VTEX, and there are a lot inspiring examples. If you want to dive deeper on learning about this subject, don't miss those internal apps: [builder-hub](https://github.com/vtex/builder-hub) or [store-sitemap](https://github.com/vtex-apps/store-sitemap)
+```css
+.container {
+  margin-top: 10px;
+}
+```
 
+#### CSS Namespaces
 
-## Testing
+Below, we describe the namespaces that are defined in the product-availability-gallery.
 
-`@vtex/test-tools` and `@types/jest` should be installed on `./node` package as `devDependencies`.
+| Token name                 | Component                                                                                                                                                                                                                                                                                                                                                                     | Description                                                   |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `container`                | [index](https://github.com/vtex-apps/product-availability-gallery/blob/master/react/components/ProductAvailability.tsx) | The main container of `ProductAvailability`                      |
+| `lowStockText`          | [index](https://github.com/vtex-apps/product-availability-gallery/blob/master/react/components/LowStock.tsx)    |  Normal text for the low stock message.
+| `lowStockHighlight`           | [index](https://github.com/vtex-apps/product-availability-gallery/blob/master/react/components/LowStock.tsx)   |  Number of the low stock message that is supposed to be highlighted.  |
+| `highStockText`           | [index](https://github.com/vtex-apps/product-availability-gallery/blob/master/react/components/HighStock.tsx)   | Text of the hight stock message.    |
+| `showAvailableText`           | [index](https://github.com/vtex-apps/product-availability-gallery/blob/master/react/components/ShowAvailable.tsx)   | Text of the show available message.    |
 
-Run `vtex test` and [Jest](https://jestjs.io/) will do its thing.
+## Troubleshooting
 
-Check the `node/__tests__/simple.test.ts` test case and also [Jest's Documentation](https://jestjs.io/docs/en/getting-started).
+You can check if others are passing through similar issues [here](https://github.com/vtex-apps/product-availability-gallery-gallery/issues). Also feel free to [open issues](https://github.com/vtex-apps/product-availability-gallery/issues/new) or contribute with pull requests.
 
-## Splunk Dashboard
+### Travis CI
 
-We have an (for now, VTEX-only, internal) Splunk dashboard to show all metrics related to your app. You can find it [here](https://splunk7.vtex.com/en-US/app/vtex_colossus/node_app_metrics).
-
-After linking this app and making some requests, you can select `vtex.service-example` and see the metrics for your app. **Don't forget to check the box Development, as you are linking your app in a development workspace**.
-
-For convenience, the link for the current version: https://splunk7.vtex.com/en-US/app/vtex_colossus/node_app_metrics?form.time.earliest=-30m%40m&form.time.latest=%40m&form.picked_context=false&form.picked_region=aws-us-east-*&form.picked_service=vtex.service-example
+[![Build Status](https://travis-ci.org/vtex-apps/product-availability-gallery.svg?branch=master)](https://travis-ci.org/vtex-apps/product-availability-gallery)
+[![Coverage Status](https://coveralls.io/repos/github/vtex-apps/product-availability-gallery/badge.svg?branch=master)](https://coveralls.io/github/vtex-apps/product-availability-gallery?branch=master)
