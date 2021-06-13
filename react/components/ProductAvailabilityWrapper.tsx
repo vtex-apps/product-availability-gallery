@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {useProduct} from 'vtex.product-context'
 import type {ProductTypes} from 'vtex.product-context'
-import { useRuntime } from 'vtex.render-runtime'
 import {useCssHandles} from 'vtex.css-handles'
 import type {CssHandlesTypes} from 'vtex.css-handles'
 import {defineMessages} from 'react-intl'
@@ -109,7 +108,7 @@ function ProductAvailabilityWrapper({
                                     }: Props) {
     const {handles, withModifiers} = useCssHandles(CSS_HANDLES, {classes})
     const productContextValue = useProduct()
-    const runtime = useRuntime()
+
     const session = useFullSession()
     const [userEmail, setUserEmail] = useState<string>('');
     const [userId, setUserId] = useState<string>('');
@@ -127,8 +126,9 @@ function ProductAvailabilityWrapper({
                 credentials: 'include'
             })
             .then(response => response.json())
-            // eslint-disable-next-line no-console
-            .then(json => setBalance(json.balance[0]))
+            .then(json => {
+                setBalance(json.balance[0])
+            })
     }
 
     const getUser = () => {
@@ -148,8 +148,9 @@ function ProductAvailabilityWrapper({
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-            setUserEmail(session?.data?.session?.namespaces?.profile?.email)
-            setUserId(session?.data?.session?.namespaces?.profile?.id?.value)}
+            setUserEmail(session?.data?.session?.namespaces?.authentication?.storeUserEmail?.value)
+            setUserId(session?.data?.session?.namespaces?.authentication?.storeUserId?.value)
+        }
     }, [session])
 
     useEffect(() => {
@@ -164,11 +165,15 @@ function ProductAvailabilityWrapper({
         }
     }, [warehouse])
 
+    useEffect(() => {
+        if(userId) {
+            getData()
+        }
+    }, [productContextValue])
+
     if (!productContextValue) {
         return null
     }
-
-    const availableQuantity = balance.totalQuantity - balance.reservedQuantity ?? 0
 
     return (
         <div>
@@ -179,7 +184,7 @@ function ProductAvailabilityWrapper({
                     highStockMessage={highStockMessage}
                     showAvailability={isSeller ? showAvailability : false}
                     showAvailabilityMessage={showAvailabilityMessage}
-                    availableQuantity={availableQuantity}
+                    balance={balance}
                 />
             </CssHandlesProvider>
         </div>

@@ -4,11 +4,11 @@ export async function user(ctx: Context, next: () => Promise<any>) {
     clients: { additionalData: additionalDataClient },
   } = ctx
 
-  console.info('Received userId:', userId)
+  // console.info('Received userId:', userId)
 
   const userResponse = await additionalDataClient.get(userId)
 
-  console.info('user response:', userResponse)
+  // console.info('user response:', userResponse)
 
   // const {
   //   headers,

@@ -12,14 +12,14 @@ export default class AdditionalDataClient extends ExternalClient {
       },
     })
 
-    console.log(context.authToken)
-    console.log(context.adminUserAuthToken)
+    // console.log(context.authToken)
+    // console.log(context.adminUserAuthToken)
 
   }
 
   public async get(userId: string) {
     const resp = await this.http.get(`search?_where=userId=${userId}&_fields=_all`)
-    console.log(resp.data)
+    // console.log(resp.data)
     return resp
   }
 }

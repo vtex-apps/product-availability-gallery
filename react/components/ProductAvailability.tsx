@@ -1,5 +1,4 @@
 import React, { memo } from 'react'
-import type { ProductTypes } from 'vtex.product-context'
 
 import LowStock from './LowStock'
 import HighStock from './HighStock'
@@ -12,7 +11,7 @@ interface Props {
   highStockMessage?: string
   showAvailability?: boolean
   showAvailabilityMessage?: string
-  availableQuantity?: ProductTypes.CommercialOffer['AvailableQuantity']
+  balance?: any
 }
 
 function ProductAvailability({
@@ -21,8 +20,9 @@ function ProductAvailability({
   highStockMessage,
   showAvailability,
   showAvailabilityMessage,
-  availableQuantity,
+  balance,
 }: Props) {
+  const availableQuantity = balance.totalQuantity - balance.reservedQuantity ?? 0
   if (!availableQuantity || availableQuantity < 1) {
     return null
   }
