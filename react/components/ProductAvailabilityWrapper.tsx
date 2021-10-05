@@ -5,7 +5,6 @@ import {useCssHandles} from 'vtex.css-handles'
 import type {CssHandlesTypes} from 'vtex.css-handles'
 import {defineMessages} from 'react-intl'
 import {useFullSession} from 'vtex.session-client'
-
 import ProductAvailability from './ProductAvailability'
 import {CssHandlesProvider} from './CssHandlesContext'
 
@@ -54,31 +53,25 @@ const messages = defineMessages({
         id: 'admin/editor.product-availability.showAvailabilityMessage.description',
     },
 })
-
 const CONTAINER_CSS_HANDLES = ['container'] as const
 const LOW_STOCK_CSS_HANDLES = ['lowStockText', 'lowStockHighlight'] as const
 const HIGH_STOCK_CSS_HANDLES = ['highStockText'] as const
 const SHOW_AVAILABLE_CSS_HANDLES = ['showAvailableText'] as const
-
 export const CSS_HANDLES = [
     ...CONTAINER_CSS_HANDLES,
     ...LOW_STOCK_CSS_HANDLES,
     ...HIGH_STOCK_CSS_HANDLES,
     ...SHOW_AVAILABLE_CSS_HANDLES,
 ] as const
-
 export function getFirstAvailableSeller(sellers?: ProductTypes.Seller[]) {
     if (!sellers || sellers.length === 0) {
         return
     }
-
     const availableSeller = sellers.find(
         seller => seller.commertialOffer.AvailableQuantity !== 0
     )
-
     return availableSeller
 }
-
 interface Props {
     threshold: number
     lowStockMessage?: string
@@ -92,12 +85,10 @@ interface Props {
             | typeof SHOW_AVAILABLE_CSS_HANDLES
             )>
 }
-
 interface Balance {
     totalQuantity: number;
     reservedQuantity: number;
 }
-
 function ProductAvailabilityWrapper({
                                         threshold = 0,
                                         lowStockMessage,
@@ -108,9 +99,7 @@ function ProductAvailabilityWrapper({
                                     }: Props) {
     const {handles, withModifiers} = useCssHandles(CSS_HANDLES, {classes})
     const productContextValue = useProduct()
-
     const session = useFullSession()
-    const [userEmail, setUserEmail] = useState<string>('');
     const [userId, setUserId] = useState<string>('');
     const [warehouse, setWarehouse] = useState<string>('');
     const [isSeller, setIsSeller] = useState<boolean>(false);
@@ -119,7 +108,6 @@ function ProductAvailabilityWrapper({
     )
     const prodId = productContextValue?.selectedItem?.itemId;
     const [balance, setBalance] = useState<Balance>({totalQuantity: 0, reservedQuantity: 0})
-
     const getData = () => {
         fetch(`https://${window.location.hostname}/_v/status/${prodId}/${warehouse}`,
             {
@@ -130,7 +118,6 @@ function ProductAvailabilityWrapper({
                 setBalance(json.balance[0])
             })
     }
-
     const getUser = () => {
         fetch(`https://${window.location.hostname}/_v/user/${userId}`,
             {
@@ -139,42 +126,31 @@ function ProductAvailabilityWrapper({
             .then(response => response.json())
             // eslint-disable-next-line no-console
             .then(user => {
-                if(user[0].agente === "VE") {
+                console.log('user product availability galery',user)
+                if(user[0].agente === "VE" || user[0].agente === "VC" || user[0].agente === "CO") {
                     setWarehouse(user[0].sucursal)
                     setIsSeller(true);
                 }
             })
     }
-
     useEffect(() => {
         if (typeof window !== "undefined") {
-            setUserEmail(session?.data?.session?.namespaces?.authentication?.storeUserEmail?.value)
             setUserId(session?.data?.session?.namespaces?.authentication?.storeUserId?.value)
         }
     }, [session])
-
     useEffect(() => {
         if(userId) {
             getUser()
         }
     }, [userId])
-
     useEffect(() => {
         if(userId) {
             getData()
         }
-    }, [warehouse])
-
-    useEffect(() => {
-        if(userId) {
-            getData()
-        }
-    }, [productContextValue])
-
+    }, [warehouse, productContextValue])
     if (!productContextValue) {
         return null
     }
-
     return (
         <div>
             <CssHandlesProvider handles={handles} withModifiers={withModifiers}>
@@ -190,7 +166,6 @@ function ProductAvailabilityWrapper({
         </div>
     )
 }
-
 ProductAvailabilityWrapper.schema = {
     title: messages.title.id,
     description: messages.description.id,
@@ -220,5 +195,4 @@ ProductAvailabilityWrapper.schema = {
         },
     },
 }
-
 export default ProductAvailabilityWrapper

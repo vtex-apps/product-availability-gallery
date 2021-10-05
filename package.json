@@ -21,7 +21,7 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^12.12.21",
+    "@types/node": "^12.20.28",
     "@vtex/prettier-config": "^0.3.6",
     "eslint": "^7.16.0",
     "eslint-config-vtex": "^12.9.3",
