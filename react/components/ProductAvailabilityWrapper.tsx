@@ -127,15 +127,12 @@ function ProductAvailabilityWrapper({
             .then(response => response.json())
             // eslint-disable-next-line no-console
             .then(user => {
-                console.log(user[0])
-
                 if (user[0].agente === "VE" || user[0].agente === "VC" || user[0].agente === "CO") {
                     fetch(`https://${window.location.hostname}/_v/user/${clientId}`,
                         {
                             credentials: 'include'
                         })
                         .then(response => {
-                            console.log(response)
                             return response.json()
                         })
                         .then(client => {
