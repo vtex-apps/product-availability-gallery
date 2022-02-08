@@ -115,3 +115,28 @@ You can check if others are passing through similar issues [here](https://github
 
 [![Build Status](https://travis-ci.org/vtex-apps/product-availability-gallery.svg?branch=master)](https://travis-ci.org/vtex-apps/product-availability-gallery)
 [![Coverage Status](https://coveralls.io/repos/github/vtex-apps/product-availability-gallery/badge.svg?branch=master)](https://coveralls.io/github/vtex-apps/product-availability-gallery?branch=master)
+
+
+<!-- DOCS-IGNORE:start -->
+___
+
+## Contributors ✨
+
+Thanks goes to these wonderful people:
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/tomymehdi"><img src="https://avatars.githubusercontent.com/u/774112?v=4" width="100px;" alt=""/><br /><sub><b>Tomás Alfredo Mehdi</b></sub></a><br /><a href="https://github.com/vtex-apps/vtex-logger-react/commits?author=tomymehdi" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
+
+<!-- DOCS-IGNORE:end -->
